@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatLog - Herramienta Académica para LLMs</title>
+    <style>
+        :root {
+            --primary-color: #2f008b; /* Azul oscuro del logo */
+            --accent-color: #ffba28;  /* Amarillo/Naranja del logo */
+            --text-color: #333;
+            --text-light: #555;
+            --bg-color: #fff;
+            --bg-light: #f8f9fa;
+            --border-color: #dee2e6;
+            --heading-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --body-font: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--body-font);
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header --- */
+        .main-header {
+            background-color: var(--bg-light);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .main-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .main-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--heading-font);
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+         .hero h1 .highlight {
+             color: var(--accent-color);
+         }
+
+        .hero p.subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #ffca4a; /* Lighter accent */
+            transform: translateY(-2px);
+        }
+
+        /* --- Section Styling --- */
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-light {
+            background-color: var(--bg-light);
+        }
+
+        .section-title {
+            font-family: var(--heading-font);
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        /* Optional: Underline effect for title */
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+            margin: 10px auto 0;
+        }
+
+
+        /* --- What is ChatLog Section --- */
+         #que-es p {
+             text-align: center;
+             max-width: 800px;
+             margin: 0 auto;
+             color: var(--text-light);
+             font-size: 1.1rem;
+         }
+
+        /* --- Why Use ChatLog Section (Benefits) --- */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            background-color: var(--bg-color);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .benefit-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .benefit-item h3 {
+            font-family: var(--heading-font);
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+         /* Optional: Add icons */
+         .benefit-item i { /* Example using Font Awesome */
+             font-size: 2.5rem;
+             color: var(--accent-color);
+             margin-bottom: 15px;
+         }
+
+        /* --- Features Section --- */
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        /* Alternate feature layout */
+        .feature:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-text h3 {
+            font-family: var(--heading-font);
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-text ul {
+            list-style: disc;
+            margin-left: 20px;
+            color: var(--text-light);
+        }
+         .feature-text ul li {
+             margin-bottom: 8px;
+         }
+
+
+        .feature-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .feature-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- User Manual Section --- */
+        #manual {
+            max-width: 850px;
+            margin: 0 auto; /* Center the manual content */
+        }
+
+        #manual h3 {
+            font-family: var(--heading-font);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        #manual h3:first-of-type {
+            margin-top: 0;
+        }
+
+        #manual ol {
+            margin-left: 25px;
+            padding-left: 10px;
+        }
+        #manual li {
+            margin-bottom: 12px;
+        }
+        #manual p {
+            margin-bottom: 15px;
+        }
+        #manual code {
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+
+
+        /* --- Final CTA Section --- */
+        .final-cta {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .final-cta h2 {
+             font-family: var(--heading-font);
+             font-size: 2rem;
+             margin-bottom: 25px;
+        }
+        .final-cta .cta-button {
+             background-color: var(--primary-color);
+             color: white;
+        }
+         .final-cta .cta-button:hover {
+             background-color: #4a00b0; /* Darker primary */
+         }
+
+        /* --- Footer --- */
+        .main-footer {
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 0; /* Remove potential gap */
+             font-size: 0.9rem;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.4rem; }
+            .hero p.subtitle { font-size: 1.1rem; }
+            .section-title { font-size: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+             .main-header .container { flex-direction: column; gap: 10px; }
+             .main-nav ul { justify-content: center; }
+
+            .hero h1 { font-size: 2rem; }
+            .hero p.subtitle { font-size: 1rem; padding: 0 10px; }
+
+            .feature {
+                 flex-direction: column !important; /* Stack always */
+                 gap: 30px;
+                 text-align: center;
+            }
+            .feature-text ul {
+                 text-align: left; /* Align list text left */
+                 display: inline-block; /* Keep list centered */
+            }
+
+            .feature-image {
+                max-width: 80%;
+                margin: 0 auto;
+            }
+
+             .benefits-grid {
+                 grid-template-columns: 1fr; /* Single column */
+             }
+              #manual {
+                 padding: 0 15px; /* Add padding on smaller screens */
+              }
+
+        }
+         @media (max-width: 480px) {
+              body { font-size: 15px; }
+              .container { padding: 0 15px; }
+              .hero h1 { font-size: 1.8rem; }
+              .hero p.subtitle { font-size: 0.95rem; }
+              .cta-button { font-size: 1rem; padding: 10px 25px; }
+              .section-title { font-size: 1.8rem; }
+              .feature-text h3 { font-size: 1.4rem; }
+              #manual h3 { font-size: 1.3rem; }
+              .final-cta h2 { font-size: 1.7rem; }
+         }
+
+    </style>
+    <!-- Considerar añadir Font Awesome si quieres usar iconos -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <!-- **INSTRUCCIÓN:** Reemplaza 'chatlog-logo.png' con la ruta correcta si es diferente -->
+                <img src= “https://i.imgur.com/cbKaWNo.png" alt="ChatLog Logo">
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#que-es">Qué es</a></li>
+                    <li><a href="#por-que">Por qué usarlo</a></li>
+                    <li><a href="#caracteristicas">Características</a></li>
+                    <li><a href="#manual">Manual</a></li>
+                    <li><a href="#instalar" class="cta-button-nav">Instalar</a></li> <!-- Botón instalar opcional en nav -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>ChatLog: <span class="highlight">Rigor y transparencia</span> para tu investigación con IA</h1>
+            <p class="subtitle">La extensión de navegador esencial para académicos que documenta, gestiona y declara tus interacciones con Modelos de Lenguaje Grandes (LLMs).</p>
+            <!-- **INSTRUCCIÓN:** Cambia '#' por el enlace real a la tienda de extensiones cuando esté disponible -->
+            <a href="#" id="instalar" class="cta-button">Instalar extensión (Próximamente)</a>
+            <p style="font-size: 0.8em; margin-top: 15px;">Compatible con Chrome, Edge (y otros navegadores Chromium)</p>
+        </div>
+    </section>
+
+    <section id="que-es" class="section">
+        <div class="container">
+            <h2 class="section-title">¿Qué es ChatLog?</h2>
+            <p>
+                ChatLog es una extensión de navegador diseñada específicamente para **investigadores, académicos y estudiantes** que utilizan Modelos de Lenguaje Grandes (LLMs) como ChatGPT, Claude, Gemini, etc., en su trabajo. Actúa como una **bitácora digital inteligente** que se integra en tu navegador, permitiéndote registrar de forma sistemática y detallada cada interacción relevante, organizar tu trabajo por proyectos y generar fácilmente las declaraciones de uso de IA necesarias para tus publicaciones y reportes.
+            </p>
+        </div>
+    </section>
+
+    <section id="por-que" class="section section-light">
+        <div class="container">
+            <h2 class="section-title">¿Por qué usar ChatLog?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                     <!-- <i class="fas fa-microscope"></i> --> Icono opcional
+                    <h3>Fomenta el rigor metodológico</h3>
+                    <p>Registra sistemáticamente prompts, modelos, versiones, finalidades y resultados, asegurando la trazabilidad de tu metodología al usar LLMs.</p>
+                </div>
+                <div class="benefit-item">
+                     <!-- <i class="fas fa-eye"></i> -->
+                    <h3>Aumenta la transparencia</h3>
+                    <p>Documenta tus pasos y decisiones. Facilita la revisión por pares y cumple con los crecientes requisitos de transparencia en la investigación con IA.</p>
+                </div>
+                <div class="benefit-item">
+                     <!-- <i class="fas fa-shield-alt"></i> -->
+                    <h3>Promueve la ética y responsabilidad</h3>
+                    <p>Incluye campos específicos para reflexionar y anotar consideraciones éticas, mitigación de sesgos y otras observaciones críticas.</p>
+                </div>
+                 <div class="benefit-item">
+                     <!-- <i class="fas fa-file-alt"></i> -->
+                    <h3>Simplifica la Declaración de uso</h3>
+                    <p>Genera automáticamente declaraciones de uso de LLMs en varios formatos (Estándar, APA, Detallado), listas para incluir en tus manuscritos.</p>
+                </div>
+                <div class="benefit-item">
+                     <!-- <i class="fas fa-project-diagram"></i> -->
+                    <h3>Organiza tu investigación</h3>
+                    <p>Gestiona tus interacciones por proyectos, usa etiquetas personalizadas y califica la utilidad de cada sesión para un análisis posterior eficiente.</p>
+                </div>
+                 <div class="benefit-item">
+                     <!-- <i class="fas fa-database"></i> -->
+                    <h3>Control total de tus datos</h3>
+                    <p>Todos tus registros se guardan localmente en tu navegador, garantizando tu privacidad y control. Exporta e importa tus datos fácilmente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="caracteristicas" class="section">
+        <div class="container">
+            <h2 class="section-title">Características principales</h2>
+
+            <div class="feature">
+                <div class="feature-text">
+                    <h3>Registro detallado e intuitivo</h3>
+                    <p>Captura toda la información esencial de tus interacciones con LLMs:</p>
+                     <ul>
+                         <li>Nombre y finalidad de la interacción.</li>
+                         <li>Modelo de lenguaje (LLM) y su versión.</li>
+                         <li>Prompt principal utilizado.</li>
+                         <li>Enlace a la conversación (si aplica).</li>
+                         <li>Etiquetas personalizadas para fácil búsqueda.</li>
+                         <li>Calificación de utilidad (1-5 estrellas).</li>
+                         <li>Notas específicas sobre ética, sesgos y otras observaciones.</li>
+                     </ul>
+                </div>
+                <div class="feature-image">
+                     <!-- **INSTRUCCIÓN:** Reemplaza 'screenshot-proyectos.png' con la ruta correcta si es diferente -->
+                     <img src="https://i.imgur.com/BmYz5su.png" alt="Captura de pantalla de la pestaña Proyectos en ChatLog mostrando el formulario de registro">
+                     <p style="font-size: 0.8em; color: var(--text-light); margin-top: 5px;">Pestaña principal para gestión y registro.</p>
+                 </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-text">
+                    <h3>Generador de Declaraciones de uso de IA</h3>
+                     <p>Simplifica el cumplimiento de los requisitos de publicación y transparencia:</p>
+                     <ul>
+                         <li>Selecciona fácilmente los registros a incluir.</li>
+                         <li>Filtra por proyecto.</li>
+                         <li>Elige entre múltiples formatos (Estándar, Detallado, Mínimo, Estilo APA).</li>
+                         <li>Personaliza la inclusión de prompts, enlaces y fechas.</li>
+                         <li>Previsualiza, copia al portapapeles o descarga como archivo .txt.</li>
+                     </ul>
+                 </div>
+                 <div class="feature-image">
+                     <!-- **INSTRUCCIÓN:** Reemplaza 'screenshot-declaracion.png' con la ruta correcta si es diferente -->
+                     <img src="https://i.imgur.com/i5JMZXH.png" alt="Captura de pantalla de la pestaña Declaración de Uso en ChatLog">
+                      <p style="font-size: 0.8em; color: var(--text-light); margin-top: 5px;">Genera reportes de uso fácilmente.</p>
+                 </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-text">
+                    <h3>Gestión de Proyectos y organización</h3>
+                     <p>Mantén tu investigación estructurada:</p>
+                     <ul>
+                         <li>Crea y gestiona múltiples proyectos de investigación.</li>
+                         <li>Asigna registros a proyectos específicos o mantenlos generales.</li>
+                         <li>Filtra rápidamente tus registros por proyecto.</li>
+                         <li>Utiliza etiquetas (tags) personalizables con autocompletado para categorizar interacciones.</li>
+                     </ul>
+                 </div>
+                 <div class="feature-image">
+                     <!-- **INSTRUCCIÓN:** Reutiliza 'screenshot-proyectos.png' o usa otra si muestra mejor la gestión -->
+                     <img src="screenshot-proyectos.png" alt="Captura de pantalla mostrando la gestión de proyectos en ChatLog">
+                     <p style="font-size: 0.8em; color: var(--text-light); margin-top: 5px;">Organiza tus interacciones por proyectos y etiquetas.</p>
+                 </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-text">
+                    <h3>Estadísticas y análisis visual</h3>
+                     <p>Comprende tus patrones de uso de LLMs:</p>
+                     <ul>
+                         <li>Visualiza resúmenes generales (total interacciones, modelos, proyectos, finalidades).</li>
+                         <li>Filtra estadísticas por período, proyecto o modelo específico.</li>
+                         <li>Identifica los modelos y finalidades más utilizados con tablas y gráficos.</li>
+                         <li>Analiza la actividad a lo largo del tiempo y la distribución por proyecto.</li>
+                         <li>Descubre las etiquetas más frecuentes con una nube de tags.</li>
+                     </ul>
+                 </div>
+                 <div class="feature-image">
+                      <!-- **INSTRUCCIÓN:** Reemplaza 'screenshot-estadisticas.png' con la ruta correcta si es diferente -->
+                     <img src="https://i.imgur.com/CLoiQDl.png" alt="Captura de pantalla de la pestaña Estadísticas en ChatLog">
+                      <p style="font-size: 0.8em; color: var(--text-light); margin-top: 5px;">Analiza tus patrones de uso de IA.</p>
+                 </div>
+            </div>
+
+             <div class="feature">
+                <div class="feature-text">
+                    <h3>Herramientas de datos y gestión</h3>
+                     <p>Control total sobre tu información:</p>
+                     <ul>
+                         <li>**Almacenamiento Local:** Tus datos residen únicamente en tu navegador.</li>
+                         <li>**Exportación Flexible:** Guarda todos tus datos (registros y proyectos) en formato JSON para backups o transferencias.</li>
+                         <li>**Exportación CSV:** Exporta tus registros en formato CSV para análisis en hojas de cálculo u otras herramientas.</li>
+                         <li>**Importación:** Restaura tus datos desde un archivo JSON o importa registros desde un CSV.</li>
+                         <li>**Gestión Avanzada:** Edita o elimina proyectos y registros de forma masiva desde la pestaña de herramientas.</li>
+                     </ul>
+                 </div>
+                 <div class="feature-image">
+                     <!-- **INSTRUCCIÓN:** Reemplaza 'screenshot-herramientas.png' con la ruta correcta si es diferente -->
+                     <img src="https://i.imgur.com/SiVqIyQ.png" alt="Captura de pantalla de la pestaña Herramientas en ChatLog">
+                     <p style="font-size: 0.8em; color: var(--text-light); margin-top: 5px;">Importa, exporta y gestiona tus datos.</p>
+                 </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="manual" class="section section-light">
+        <div class="container">
+            <h2 class="section-title">Manual de usuario rápido</h2>
+
+            <h3>1. Instalación</h3>
+            <ol>
+                <li>Ve a la tienda de extensiones de tu navegador (Chrome Web Store, Microsoft Edge Add-ons).</li>
+                <li>Busca "ChatLog" (o el nombre final de la extensión).</li>
+                <li>Haz clic en "Añadir a [Navegador]" o "Instalar".</li>
+                <li>Una vez instalada, el icono de ChatLog ( <img src="chatlog-logo.png" alt="logo pequeño" style="height: 1em; vertical-align: middle;"> ) aparecerá en la barra de herramientas de tu navegador. Puede que necesites fijarlo haciendo clic en el icono de extensiones (pieza de puzzle).</li>
+            </ol>
+
+            <h3>2. Abrir y usar ChatLog</h3>
+             <p>Haz clic en el icono de ChatLog en tu barra de herramientas. Esto abrirá el panel lateral de ChatLog junto a tu página actual.</p>
+
+            <h3>3. Registrar una nueva interacción</h3>
+            <ol>
+                <li>Asegúrate de estar en la pestaña "Proyectos".</li>
+                <li>Rellena los campos del formulario "Nuevo Registro":
+                    <ul>
+                        <li>**Nombre de la Interacción:** Un título descriptivo (Ej: "Brainstorming Título Artículo").</li>
+                        <li>**Finalidad:** Selecciona del menú o elige "Otro" y especifica.</li>
+                        <li>**Nombre del LLM:** Ej: "ChatGPT", "Claude".</li>
+                        <li>**Versión del LLM (Opcional):** Ej: "GPT-4o", "Sonnet 3.5".</li>
+                        <li>**Prompt:** Pega o escribe el prompt principal que usaste.</li>
+                        <li>**Liga (Opcional):** Si la plataforma ofrece un enlace permanente a la conversación.</li>
+                        <li>**Etiquetas:** Escribe palabras clave y presiona Enter o Coma. Usa las sugerencias.</li>
+                        <li>**Notas Éticas/Sesgo/Observaciones:** Añade tus reflexiones.</li>
+                        <li>**Calificación:** Haz clic en las estrellas para valorar la utilidad.</li>
+                    </ul>
+                </li>
+                 <li>Selecciona un **Proyecto** existente del menú desplegable de arriba, o déjalo como "Sin Proyecto".</li>
+                <li>Haz clic en "Guardar registro".</li>
+                <li>El registro aparecerá en la lista de "Acceso Rápido".</li>
+            </ol>
+
+            <h3>4. Gestionar proyectos</h3>
+            <ul>
+                <li>**Crear:** En la pestaña "Proyectos", escribe un nombre en "Nombre del nuevo proyecto" y haz clic en "Crear Proyecto".</li>
+                 <li>**Seleccionar:** Usa el menú desplegable "Mostrar Todos" para filtrar los registros en "Acceso Rápido".</li>
+                 <li>**Eliminar:** Selecciona un proyecto en el menú desplegable y haz clic en "Eliminar Proyecto" (disponible si hay un proyecto seleccionado).</li>
+                 <li>**Editar/Eliminar (Avanzado):** Ve a la pestaña "Herramientas" -> "Edición y Borrado de Proyectos".</li>
+            </ul>
+
+            <h3>5. Generar una Declaración de uso de IA</h3>
+            <ol>
+                <li>Ve a la pestaña "Declaración de Uso".</li>
+                <li>(Opcional) Filtra los registros por proyecto usando el menú desplegable.</li>
+                <li>Marca las casillas de los registros que quieras incluir. Usa "Seleccionar todos" o "Deseleccionar todos" si es necesario.</li>
+                <li>Elige el "Formato" deseado y ajusta las "Opciones de Declaración".</li>
+                <li>Haz clic en "Generar Declaración".</li>
+                <li>La vista previa se mostrará abajo. Puedes "Copiar al portapapeles" o "Descargar como TXT".</li>
+            </ol>
+
+            <h3>6. Usar herramientas (Exportar/Importar)</h3>
+            <ol>
+                <li>Ve a la pestaña "Herramientas".</li>
+                <li>**Exportar:** Haz clic en "Exportar todos los datos (JSON)" para un backup completo o "Exportar registros como CSV" para análisis. El archivo se descargará.</li>
+                <li>**Importar:**
+                    <ul>
+                        <li>**JSON:** Haz clic en "Seleccionar archivo" bajo "Importar desde JSON", elige tu archivo de backup <code>.json</code> y haz clic en "Importar JSON". Confirma si quieres fusionar o reemplazar.</li>
+                        <li>**CSV:** Haz clic en "Seleccionar archivo" bajo "Importar desde CSV", elige tu archivo <code>.csv</code>. Verás una vista previa. Haz clic en "Importar CSV" para añadir los registros.</li>
+                    </ul>
+                </li>
+                 <li>Desde aquí también puedes gestionar (editar/eliminar) proyectos y registros de forma más detallada.</li>
+            </ol>
+
+        </div>
+    </section>
+
+    <section class="final-cta" id="final-cta-section">
+         <div class="container">
+            <h2>Listo para llevar tu investigación con IA al siguiente nivel?</h2>
+             <!-- **INSTRUCCIÓN:** Cambia '#' por el enlace real a la tienda de extensiones cuando esté disponible -->
+            <a href="#" class="cta-button">Instala ChatLog Ahora (próximamente)</a>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>© 2025 ChatLog. “Cada interacción cuenta. Cada registro simplifica”.. Diseñado por la Comunidad Ibero para la comunidad académica.</p>
+             <!-- Puedes añadir más info si quieres, como contacto o enlace a política de privacidad -->
+        </div>
+    </footer>
+
+</body>
+</html>
