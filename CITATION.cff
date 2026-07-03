@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "Si utilizas ChatLog, por favor cítalo usando los metadatos de este archivo."
+title: "ChatLog. Bitácora digital"
+type: software
+version: "2.0"
+date-released: "2026-06-12"
+abstract: >-
+  Extensión gratuita para Google Chrome diseñada como una bitácora personal y
+  privada para registrar, organizar y reflexionar sobre el uso de modelos de
+  lenguaje en el trabajo académico. Genera declaraciones de uso de IA a partir
+  de los registros de interacciones, distinguiendo claramente entre asistencia
+  de IA y autoría intelectual propia. El valor de la herramienta está en la
+  verificación humana y la trazabilidad, no en automatizar el juicio académico.
+authors:
+  - family-names: Marquez
+    given-names: Teresa
+    email: teresa.marquez@ibero.mx
+    affiliation: "Departamento de Ciencias Sociales y Políticas, Universidad Iberoamericana Ciudad de México (IBERO CDMX)"
+    orcid: "https://orcid.org/0000-0003-0737-6484"
+# El código fuente (la extensión) se distribuye bajo Apache-2.0.
+# Los materiales pedagógicos (manual, guías, infografías) se distribuyen bajo
+# CC-BY-4.0. El detalle del doble licenciamiento está en LICENSING.md.
+license: Apache-2.0
+repository-code: "https://github.com/tmarquez-mx/ChatLog"
+url: "https://socialesypoliticas.ibero.mx/chatlog"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21168851"
+    description: "Registro en Zenodo (versión 2.0, junio 2026)."
+keywords:
+  - integridad académica
+  - trazabilidad
+  - declaración de uso
+  - inteligencia artificial
+  - educación superior
+  - alfabetización en IA
+  - IA generativa
+  - docencia
+  - extensión de Chrome

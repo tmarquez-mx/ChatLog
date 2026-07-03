@@ -1,0 +1,32 @@
+Licencia para materiales pedagógicos de ChatLog
+================================================
+
+Los materiales pedagógicos de este repositorio —incluyendo el manual de
+usuario, las guías de uso, las infografías y cualquier otro documento de
+acompañamiento— están sujetos a la licencia Creative Commons Attribution 4.0
+International (CC BY 4.0), salvo indicación contraria.
+
+Copyright (c) 2026 Teresa Marquez
+Departamento de Ciencias Sociales y Políticas
+Universidad Iberoamericana Ciudad de México
+https://orcid.org/0000-0003-0737-6484
+
+Eres libre de:
+  - Compartir: copiar y redistribuir el material en cualquier medio o formato.
+  - Adaptar: remezclar, transformar y construir a partir del material para
+    cualquier propósito, incluso comercialmente.
+
+Bajo los siguientes términos:
+  - Atribución: debes dar crédito de manera adecuada, brindar un enlace a la
+    licencia e indicar si se han realizado cambios. Puedes hacerlo en cualquier
+    forma razonable, pero no de forma tal que sugiera que el licenciante te
+    respalda a ti o al uso que haces del material.
+  - Sin restricciones adicionales: no puedes aplicar términos legales ni medidas
+    tecnológicas que restrinjan legalmente a otras personas a hacer cualquier uso
+    permitido por la licencia.
+
+Texto legal completo:
+https://creativecommons.org/licenses/by/4.0/legalcode.en
+
+Referencia canónica de la licencia:
+https://creativecommons.org/licenses/by/4.0/
