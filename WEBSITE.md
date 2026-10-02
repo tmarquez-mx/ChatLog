@@ -1,4 +1,4 @@
-# Sitio promocional de ChatLog V2
+# Sitio promocional de ChatLog
 
 El sitio está en `website/`, separado de los archivos históricos del repositorio
 y de la extensión. Es HTML, CSS y JavaScript estáticos, sin compilación.
@@ -20,7 +20,7 @@ solo viven en memoria durante la visita. No se incluye analítica ni almacenamie
 persistente. Los enlaces de instalación, manual y asistentes conducen a servicios
 externos. La política de privacidad de la extensión se enlaza en navegación,
 sección de privacidad y pie de página:
-https://socialesypoliticas.ibero.mx/chatlog-privacidad/
+https://tmarquez-mx.github.io/ChatLog/privacidad/
 
 Las capturas de `website/assets/` muestran la interfaz V2 con datos ficticios,
 no registros personales. El ícono conserva el recurso original de ChatLog.
@@ -37,3 +37,7 @@ Las fuentes Literata y Manrope se alojan localmente con sus licencias OFL.
 
 La demo no certifica integridad académica ni cumplimiento editorial. Sus textos
 deben adaptarse a las reglas del curso, institución o publicación.
+
+## Versión del repositorio
+
+El código fuente y el manual corresponden a la 2.0.1 en revisión; Chrome Web Store mantiene la 2.0.0 hasta su actualización. El sitio enlaza el manual local `website/assets/Manual_Usuario_ChatLog_v2.0.1.pdf` y la política de GitHub Pages. La demo y sus ejemplos conservan su comportamiento ilustrativo.

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatLog</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ChatLog</h1>
+            <div class="header-controls">
+                <span id="storage-usage" class="storage-info">Uso: 0KB / 10MB</span>
+                <button type="button" id="onboarding-toggle-btn" class="secondary-control-btn">Guía de inicio</button>
+                <button type="button" id="about-toggle-btn" class="secondary-control-btn">Sobre</button>
+            </div>
+        </header>
+
+        <div id="app-status" class="app-status" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+        <div id="app-dialog-overlay" class="app-dialog-overlay" hidden>
+            <div
+                class="app-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="app-dialog-title"
+                aria-describedby="app-dialog-message"
+            >
+                <h2 id="app-dialog-title">Confirmación</h2>
+                <p id="app-dialog-message"></p>
+                <div class="form-actions app-dialog-actions">
+                    <button type="button" id="app-dialog-cancel-btn">Cancelar</button>
+                    <button type="button" id="app-dialog-confirm-btn">Continuar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="onboarding-overlay" class="onboarding-overlay" hidden>
+            <section
+                class="onboarding-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="onboarding-title"
+                aria-describedby="onboarding-description"
+            >
+                <div class="onboarding-header">
+                    <div>
+                        <p class="onboarding-kicker">Guía de inicio</p>
+                        <h2 id="onboarding-title">Bienvenida a ChatLog</h2>
+                    </div>
+                    <button type="button" id="onboarding-close-btn" class="secondary-control-btn">Cerrar</button>
+                </div>
+
+                <div class="onboarding-progress" aria-label="Progreso de la guía">
+                    <span class="onboarding-progress-dot active" data-onboarding-dot="0"></span>
+                    <span class="onboarding-progress-dot" data-onboarding-dot="1"></span>
+                    <span class="onboarding-progress-dot" data-onboarding-dot="2"></span>
+                </div>
+
+                <div class="onboarding-step active" data-onboarding-step="0">
+                    <p id="onboarding-description">
+                        ChatLog te ayuda a documentar cómo utilizas herramientas de inteligencia artificial
+                        y a convertir tus registros en declaraciones de uso claras y trazables.
+                    </p>
+                    <div class="onboarding-highlight">
+                        <strong>La ruta básica es sencilla:</strong>
+                        primero organiza el trabajo en un proyecto, después registra cada interacción y,
+                        cuando lo necesites, genera la declaración correspondiente.
+                    </div>
+                </div>
+
+                <div class="onboarding-step" data-onboarding-step="1">
+                    <h3>¿Qué conviene registrar?</h3>
+                    <p>
+                        Anota el modelo utilizado, la finalidad de la interacción, el prompt, el enlace
+                        a la conversación o la referencia de evidencia conservada, y la etapa del trabajo.
+                    </p>
+                    <p>
+                        También es recomendable explicar cómo verificaste la información y qué decisiones
+                        asumiste como responsable de la autoría.
+                    </p>
+                </div>
+
+                <div class="onboarding-step" data-onboarding-step="2">
+                    <h3>Tres pasos para comenzar</h3>
+                    <ol class="onboarding-route">
+                        <li><strong>Proyecto:</strong> crea uno nuevo o selecciona uno existente.</li>
+                        <li><strong>Interacción:</strong> escribe el registro; se guarda automáticamente, aunque esté incompleto.</li>
+                        <li><strong>Declaración:</strong> selecciona los registros y el formato adecuado.</li>
+                    </ol>
+                    <p>
+                        La ruta de trabajo permanecerá disponible en la pestaña Proyectos y podrás volver
+                        a abrir esta guía desde el encabezado.
+                    </p>
+                </div>
+
+                <div class="onboarding-actions">
+                    <button type="button" id="onboarding-skip-btn" class="onboarding-text-btn">Omitir guía</button>
+                    <div>
+                        <button type="button" id="onboarding-back-btn" class="secondary-control-btn" hidden>Anterior</button>
+                        <button type="button" id="onboarding-next-btn">Siguiente</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section id="about-panel" class="about-panel" style="display: none;">
+            <div class="about-panel-header">
+                <h2>Sobre ChatLog</h2>
+                <button type="button" id="about-close-btn" class="secondary-control-btn">Cerrar</button>
+            </div>
+            <p>
+                ChatLog es un proyecto académico de acceso abierto del Departamento de Ciencias Sociales y Políticas de la Universidad Iberoamericana Ciudad de México. Su diseño se basó en formatos y estándares internacionales de referencia en materia de declaración de uso de inteligencia artificial, incluyendo el AID Framework (<a href="https://doi.org/10.48550/arXiv.2408.01904" target="_blank" rel="noopener noreferrer">Weaver, K. D., 2025. The Artificial Intelligence Disclosure (AID) Framework: An Introduction.</a>), los antecedentes del Vancouver Standard, y las directrices editoriales de Elsevier y de APA
+            </p>
+            <p><strong>Versión:</strong> 2.0.1 (Octubre, 2026)</p>
+            <p><strong>Declaración de financiamiento:</strong> El proyecto fue financiado por la Dirección de Innovación Educativa (DIE) de la Ibero CDMX</p>
+            <p><strong>Responsable:</strong> Dra. Teresa Márquez</p>
+            <p><strong>Repositorio:</strong> <a href="https://github.com/tmarquez-mx/ChatLog" target="_blank" rel="noopener noreferrer">Github</a></p>
+            <p><strong>Privacidad:</strong> <a href="../docs/privacidad/index.html" target="_blank" rel="noopener noreferrer">Política de privacidad</a></p>
+            <p><strong>Manual:</strong> <a href="../manuals/Manual_Usuario_ChatLog_v2.0.1.pdf" target="_blank" rel="noopener noreferrer">Manual en PDF</a></p>
+            <p><strong>Ayuda:</strong> <a href="https://chatgpt.com/g/g-6a25024ca4108191b831496f92340667-chatlog-asistente" target="_blank" rel="noopener noreferrer">GPT "ChatLog Asistente"</a>; <a href="https://opal.google/app/1sA_JKrK5jAbZPyJYM-HKOH2WQw90CQnd" target="_blank" rel="noopener noreferrer">Google App "ChatLog tutor"</a></p>
+        </section>
+
+        <section id="backup-reminder-banner" class="backup-reminder-banner" style="display: none;">
+            <div>
+                <strong>Recordatorio de respaldo</strong>
+                <p>Recuerda exportar un respaldo de tu información en JSON o CSV.</p>
+            </div>
+            <button type="button" id="dismiss-reminder-btn" class="secondary-control-btn">Entendido</button>
+        </section>
+
+        <!-- Navegación por Pestañas -->
+        <nav class="tab-navigation" role="tablist" aria-label="Secciones principales">
+            <button id="tab-main" class="tab-button active" data-tab="main" role="tab" aria-controls="main" aria-selected="true">Proyectos</button>
+            <button id="tab-declaration" class="tab-button" data-tab="declaration" role="tab" aria-controls="declaration" aria-selected="false">Declaración de uso</button>
+            <button id="tab-tools" class="tab-button" data-tab="tools" role="tab" aria-controls="tools" aria-selected="false">Herramientas</button>
+            <button id="tab-stats" class="tab-button" data-tab="stats" role="tab" aria-controls="stats" aria-selected="false">Estadísticas</button>
+        </nav>
+
+        <!-- Página Proyectos (antiguamente Principal) -->
+        <section id="main" class="tab-content active" role="tabpanel" aria-labelledby="tab-main">
+            <div id="guided-flow" class="section guided-flow">
+                <div class="guided-flow-header">
+                    <div>
+                        <p class="guided-flow-kicker">Ruta de trabajo</p>
+                        <h2>Avanza paso a paso</h2>
+                    </div>
+                    <div class="guided-flow-header-actions">
+                        <p id="guided-flow-summary">Comienza creando o seleccionando un proyecto.</p>
+                        <button type="button" id="guided-flow-toggle" class="guided-flow-toggle" aria-expanded="true" aria-controls="guided-flow-content" aria-label="Contraer ruta de trabajo" title="Contraer ruta de trabajo">
+                            <span class="guided-flow-chevron" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+                <div id="guided-flow-content" class="guided-flow-steps">
+                    <article class="guided-flow-step" data-guided-step="project">
+                        <div class="guided-step-number">1</div>
+                        <div class="guided-step-content">
+                            <div class="guided-step-heading">
+                                <h3>Proyecto</h3>
+                                <span class="guided-step-status">Por comenzar</span>
+                            </div>
+                            <p>Organiza tus interacciones dentro de un proyecto.</p>
+                            <button type="button" id="guided-project-btn" class="guided-step-action">Ir a proyectos</button>
+                        </div>
+                    </article>
+                    <article class="guided-flow-step" data-guided-step="record">
+                        <div class="guided-step-number">2</div>
+                        <div class="guided-step-content">
+                            <div class="guided-step-heading">
+                                <h3>Interacción</h3>
+                                <span class="guided-step-status">Después</span>
+                            </div>
+                            <p>Registra la finalidad, el modelo, el prompt y el enlace o referencia de evidencia.</p>
+                            <button type="button" id="guided-record-btn" class="guided-step-action">Registrar interacción</button>
+                        </div>
+                    </article>
+                    <article class="guided-flow-step" data-guided-step="declaration">
+                        <div class="guided-step-number">3</div>
+                        <div class="guided-step-content">
+                            <div class="guided-step-heading">
+                                <h3>Declaración</h3>
+                                <span class="guided-step-status">Después</span>
+                            </div>
+                            <p>Elige los registros y genera la declaración de uso.</p>
+                            <button type="button" id="guided-declaration-btn" class="guided-step-action">Generar declaración</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Gestión de proyectos -->
+            <div id="project-management-section" class="section">
+                <h2>Gestión de proyectos</h2>
+                <div class="project-controls">
+                    <label for="project-select">Proyecto actual:</label>
+                    <select id="project-select">
+                        <option value="all">-- Mostrar todos --</option>
+                        <option value="none">-- Sin proyecto --</option>
+                    </select>
+                    <div class="project-actions">
+                        <div class="project-action-buttons">
+                            <button id="add-project-btn">Crear proyecto</button>
+                            <button id="delete-project-btn" disabled>Eliminar proyecto</button>
+                        </div>
+                        <div id="new-project-container">
+                            <label for="new-project-name">Nombre del nuevo proyecto:</label>
+                            <input type="text" id="new-project-name" placeholder="Nombre del nuevo proyecto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Registros -->
+            <div class="section">
+                <div class="form-title-row">
+                    <h2 id="form-title">Nuevo registro</h2>
+                    <span id="record-unsaved-indicator" class="record-unsaved-indicator" role="status" aria-live="polite" hidden>Guardado pendiente</span>
+                </div>
+                <p class="autosave-help">Se guarda automáticamente mientras escribes. Los registros incompletos quedan como borradores. Usa «Nuevo registro» para iniciar otra interacción.</p>
+                <form id="record-form">
+                    <input type="hidden" id="record-id">
+
+                    <div class="form-group">
+                        <label for="interaction-name">Nombre de la interacción: *</label>
+                        <input type="text" id="interaction-name" required placeholder="Título descriptivo de la interacción">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="purpose">Finalidad de la interacción: *</label>
+                        <select id="purpose" required>
+                            <option value="">-- Selecciona una finalidad --</option>
+                            <option value="Análisis de documentos">Análisis de documentos</option>
+                            <option value="Asistencia en programación">Asistencia en programación</option>
+                            <option value="Conceptualización">Conceptualización</option>
+                            <option value="Creación de presentaciones">Creación de presentaciones</option>
+                            <option value="Generación de texto">Generación de texto</option>
+                            <option value="Ideación y brainstorming">Ideación y brainstorming</option>
+                            <option value="Investigación bibliográfica">Investigación bibliográfica</option>
+                            <option value="Visualización">Visualización</option>
+                            <option value="Análisis de datos">Análisis de datos</option>
+                            <option value="Curación de datos">Curación de datos</option>
+                            <option value="Planificación de proyectos">Planificación de proyectos</option>
+                            <option value="Resumen de información">Resumen de información</option>
+                            <option value="Revisión de escritura">Revisión de escritura</option>
+                            <option value="Traducción de contenido">Traducción de contenido</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <p class="field-guidance">Indica para qué utilizaste la herramienta en esta interacción.</p>
+                        <div id="other-purpose-container" style="display:none; margin-top:8px;">
+                            <input type="text" id="other-purpose" placeholder="Especificar otra finalidad">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interaction-date">Fecha de interacción:</label>
+                        <input type="date" id="interaction-date" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-company">Empresa proveedora:</label>
+                        <input type="text" id="provider-company" list="provider-suggestions" placeholder="Escribe o elige una empresa" autocomplete="off">
+                        <datalist id="provider-suggestions">
+                            <option value="OpenAI"></option>
+                            <option value="Anthropic"></option>
+                            <option value="Google"></option>
+                            <option value="Microsoft"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="llm-name">Nombre del LLM: *</label>
+                        <input type="text" id="llm-name" required list="llm-suggestions" placeholder="Escribe o elige un nombre" autocomplete="off" aria-describedby="llm-suggestions-help">
+                        <datalist id="llm-suggestions">
+                            <option value="ChatGPT"></option>
+                            <option value="Claude"></option>
+                            <option value="Gemini"></option>
+                            <option value="Microsoft Copilot"></option>
+                        </datalist>
+                        <p id="llm-suggestions-help" class="field-guidance">Puedes elegir una sugerencia o escribir otro nombre. Indica en Versión del LLM el modelo específico utilizado, cuando sea visible.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="llm-version">Versión del LLM:</label>
+                        <input type="text" id="llm-version" placeholder="Ej: GPT-4, Claude 3 Opus, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="evidence-type">Referencia de la interacción: *</label>
+                        <select id="evidence-type">
+                            <option value="url">Enlace web a la conversación</option>
+                            <option value="local">Archivo de evidencia conservada</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="interaction-link-container">
+                        <label for="interaction-link">Liga a la interacción: *</label>
+                        <input type="url" id="interaction-link" required aria-describedby="interaction-link-guidance interaction-link-error" placeholder="URL de la conversación">
+                        <p id="interaction-link-guidance" class="field-guidance">La liga debe comenzar con http:// o https://.</p>
+                        <p id="interaction-link-error" class="field-error" role="alert" hidden></p>
+                    </div>
+                    <div class="form-group" id="evidence-reference-container" hidden>
+                        <label for="evidence-reference">Nombre y ubicación del archivo: *</label>
+                        <input type="text" id="evidence-reference" aria-describedby="evidence-reference-guidance" placeholder="Evidencias/2026-10-01_revision.pdf" disabled>
+                        <p id="evidence-reference-guidance" class="field-guidance">Usa una ubicación relativa a la carpeta de tu proyecto. ChatLog guarda la referencia; no adjunta ni abre el archivo.</p>
+                    </div>
+                    <details class="field-guidance">
+                        <summary>Qué es la evidencia y cómo recogerla</summary>
+                        <p>Es una copia del intercambio que permite revisar tus instrucciones y las respuestas relevantes del LLM. Puede ser un PDF, una transcripción o capturas legibles y ordenadas. No demuestra por sí sola que la respuesta sea correcta.</p>
+                        <ol>
+                            <li>Exporta o imprime la conversación si la aplicación lo permite. Si no, copia los mensajes en un documento indicando quién escribió cada uno, o toma capturas con el contexto necesario.</li>
+                            <li>Conserva la fecha, la aplicación y el modelo cuando estén disponibles. Identifica los fragmentos como extractos.</li>
+                            <li>Guarda la copia en una carpeta de evidencias de tu proyecto y escribe aquí su nombre y ubicación.</li>
+                            <li>Respalda los archivos por separado: el CSV o JSON de ChatLog solo incluye la referencia. Protege los datos confidenciales al compartir una copia.</li>
+                        </ol>
+                        <p>No necesitas publicar el archivo en internet. En Verificación humana explica qué comprobaste y qué aceptaste, modificaste o descartaste.</p>
+                    </details>
+
+                    <div class="form-group">
+                        <label for="prompt">Prompt: *</label>
+                        <textarea id="prompt" required rows="4" placeholder="Prompt principal utilizado en la interacción"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags-input">Etiquetas / palabras clave:</label>
+                        <div class="tags-container">
+                            <div id="tags-list"></div>
+                            <input type="text" id="tags-input" placeholder="Escribe y presiona Enter o coma">
+                            <div id="tags-suggestions" class="tags-suggestions"></div>
+                        </div>
+                        <input type="hidden" id="tags">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ethical-notes">Etapa del trabajo:</label>
+                        <textarea id="ethical-notes" rows="3" placeholder="Revisión de la pregunta de investigación, borrador de los instrumentos de recolección; creación de tablas o gráficos, etc."></textarea>
+                        <p class="field-guidance">Describe en qué parte concreta del trabajo utilizaste la herramienta.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bias-notes">Verificación humana y responsabilidad:</label>
+                        <textarea id="bias-notes" rows="3" placeholder="a) Acciones de verificación humana de fuentes e información: qué se hizo exactamente sobre los outputs de la IA y con qué resultados. b) Notas sobre responsabilidad de autoría: cuidados explicitos sobre la responsabilidad intelectual, epistémica y legal del trabajo; c) Cuidados para proteger la integridad del proceso, los participantes, los datos y el entorno académico."></textarea>
+                        <p class="field-guidance">Explica qué verificaste, qué decisiones tomaste y cómo protegiste la integridad del trabajo.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observations">Otras observaciones:</label>
+                        <textarea id="observations" rows="3" placeholder="Observaciones adicionales sobre la interacción"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Calificación de la interacción:</label>
+                        <div class="rating-container">
+                            <div class="star-rating">
+                                <button type="button" class="star" data-rating="1" aria-label="Calificar con 1 estrella">★</button>
+                                <button type="button" class="star" data-rating="2" aria-label="Calificar con 2 estrellas">★</button>
+                                <button type="button" class="star" data-rating="3" aria-label="Calificar con 3 estrellas">★</button>
+                                <button type="button" class="star" data-rating="4" aria-label="Calificar con 4 estrellas">★</button>
+                                <button type="button" class="star" data-rating="5" aria-label="Calificar con 5 estrellas">★</button>
+                            </div>
+                            <div class="rating-text">Sin calificar</div>
+                            <input type="hidden" id="rating-value" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="new-record-btn">Nuevo registro</button>
+                        <button type="button" id="save-and-declare-btn">Pasar a declaración</button>
+                        <button type="button" id="cancel-edit-btn" style="display:none;">Cerrar registro</button>
+                        <button type="button" id="retry-save-btn" hidden>Reintentar guardado</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Lista de Acceso Rápido -->
+            <div class="section">
+                <h2>Acceso rápido</h2>
+                <div id="quick-access-list">
+                    <p id="no-records-message">No hay registros guardados.</p>
+                    <ul id="recent-records"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Declaración de Uso -->
+        <section id="declaration" class="tab-content" role="tabpanel" aria-labelledby="tab-declaration">
+            <h2>Declaración de uso de LLMs</h2>
+            <p>Selecciona los registros, elige el formato, revisa las recomendaciones y genera la declaración.</p>
+
+            <div class="section">
+                <h3>Selección de registros</h3>
+                <div class="filter-controls">
+                    <label for="declaration-project-select">Filtrar por proyecto:</label>
+                    <select id="declaration-project-select">
+                        <option value="all">Todos los proyectos</option>
+                        <option value="none">Sin proyecto</option>
+                    </select>
+                    <button id="select-all-records-btn">Seleccionar todos</button>
+                    <button id="deselect-all-records-btn">Deseleccionar todos</button>
+                </div>
+
+                <div id="records-container">
+                    <p id="no-declaration-records-message">No hay registros disponibles para la declaración.</p>
+                    <div id="records-list" class="records-list"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Opciones de Declaración</h3>
+                <div class="declaration-options">
+                    <div class="form-group">
+                        <label for="declaration-work-type">Tipo de trabajo:</label>
+                        <select id="declaration-work-type">
+                            <option value="">Selecciona para recibir una recomendación</option>
+                            <option value="apa">Artículo académico, tesis o ensayo</option>
+                            <option value="elsevier">Manuscrito para una revista Elsevier</option>
+                            <option value="aid">Proyecto de investigación con trazabilidad detallada</option>
+                            <option value="detailed">Informe académico o institucional</option>
+                            <option value="minimal">Constancia breve o anexo</option>
+                        </select>
+                        <p id="declaration-format-recommendation" class="field-guidance">Puedes elegir directamente un formato o indicar el tipo de trabajo.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="declaration-format">Formato:</label>
+                        <select id="declaration-format">
+                            <option value="standard">Estándar</option>
+                            <option value="detailed">Detallado</option>
+                            <option value="minimal">Mínimo</option>
+                            <option value="apa">Estilo APA</option>
+                            <option value="elsevier">Estilo Elsevier</option>
+                            <option value="aid">Estilo AID Framework</option>
+                        </select>
+                        <p id="declaration-format-guidance"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="researcher-name">Nombre del investigador/a o estudiante (opcional):</label>
+                        <input type="text" id="researcher-name" placeholder="Tu nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="institution-name">Institución (opcional):</label>
+                        <input type="text" id="institution-name" placeholder="Nombre de tu institución">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="include-prompts" checked>
+                            Incluir prompts completos
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="include-links" checked>
+                            Incluir enlaces o referencias de evidencia
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="include-dates" checked>
+                            Incluir fechas
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button id="generate-declaration-btn">Generar Declaración</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Vista previa de la Declaración</h3>
+                <div class="declaration-preview-container">
+                    <pre id="declaration-preview" class="declaration-preview">La declaración se mostrará aquí después de generarla.</pre>
+
+                    <div class="declaration-actions">
+                        <button id="copy-declaration-btn">Copiar al Portapapeles</button>
+                        <button id="download-declaration-btn">Descargar como TXT</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Herramientas -->
+        <section id="tools" class="tab-content" role="tabpanel" aria-labelledby="tab-tools">
+            <h2>Herramientas</h2>
+
+            <!-- Exportar Datos -->
+            <div class="section">
+                <h3>Respaldo y transferencia</h3>
+                <p>Guarda todos tus datos o únicamente los de un proyecto para hacer una copia de seguridad o transferirlos a otro dispositivo.</p>
+                <div class="form-group">
+                    <label for="export-project-filter">Alcance de la exportación:</label>
+                    <select id="export-project-filter">
+                        <option value="all">Todos los proyectos y registros</option>
+                        <option value="none">Registros sin proyecto</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button id="export-all-btn">Exportar datos como JSON</button>
+                    <button id="export-csv-btn">Exportar registros como CSV</button>
+                </div>
+                <p class="field-guidance">JSON: respaldo para restaurar proyectos y registros en ChatLog. CSV: tabla para revisar y analizar registros en Excel o Sheets. Ambos conservan las referencias de evidencia, pero no incluyen los archivos del disco.</p>
+            </div>
+
+            <div class="section">
+                <h3>Recordatorios de respaldo</h3>
+                <p>
+                    Programa un recordatorio para exportar tu respaldo en
+                    <span class="format-tooltip" tabindex="0" aria-describedby="json-tooltip">JSON
+                        <span id="json-tooltip" class="format-tooltip-card" role="tooltip">Archivo de texto con información organizada en pares de etiqueta y valor, diseñado para que distintos programas puedan intercambiar datos de forma estructurada y legible.</span>
+                    </span>
+                    o
+                    <span class="format-tooltip" tabindex="0" aria-describedby="csv-tooltip">CSV
+                        <span id="csv-tooltip" class="format-tooltip-card" role="tooltip">Archivo de texto que almacena datos tabulares (filas y columnas) separando cada valor con una coma. Es compatible con hojas de cálculo y herramientas de análisis de datos.</span>
+                    </span>.
+                </p>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="backup-reminder-enabled">
+                        Activar recordatorios automáticos
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="backup-reminder-frequency">Frecuencia del recordatorio:</label>
+                    <select id="backup-reminder-frequency">
+                        <option value="1">Diariamente</option>
+                        <option value="2">Cada 2 días</option>
+                        <option value="5">Cada 5 días</option>
+                        <option value="15">Cada 15 días</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="backup-reminder-changes">También recordar después de:</label>
+                    <select id="backup-reminder-changes">
+                        <option value="5">5 cambios</option>
+                        <option value="10" selected>10 cambios</option>
+                        <option value="20">20 cambios</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button id="save-reminder-settings-btn">Guardar recordatorio</button>
+                </div>
+            </div>
+
+            <!-- Importar Datos (Unificado) -->
+            <div class="section">
+                <h3>Importar datos</h3>
+                <p>Restaura tus datos desde archivos de respaldo generados anteriormente.</p>
+                <div class="form-group">
+                    <label for="import-mode">Cómo incorporar los datos:</label>
+                    <select id="import-mode">
+                        <option value="merge">Fusionar con los datos actuales (recomendado)</option>
+                        <option value="replace">Reemplazar los datos actuales</option>
+                    </select>
+                    <p class="field-guidance">Fusionar conserva la información existente. Reemplazar elimina los proyectos y registros actuales antes de importar.</p>
+                </div>
+
+                <div class="import-tabs">
+                    <div class="import-tab">
+                        <div class="form-group">
+                            <label for="import-file">Importar desde JSON:</label>
+                            <input type="file" id="import-file" accept=".json">
+                            <div class="form-actions">
+                                <button id="import-data-btn">Importar JSON</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="import-tab">
+                        <div class="form-group">
+                            <label for="csv-file">Importar desde CSV:</label>
+                            <input type="file" id="csv-file" accept=".csv">
+                            <div class="form-actions">
+                                <button id="import-csv-btn">Importar CSV</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="csv-preview-container" id="json-preview-container" style="display: none;">
+                    <h4>Vista previa JSON</h4>
+                    <div class="csv-preview" id="json-preview"></div>
+                </div>
+
+                <div class="csv-preview-container" id="csv-preview-container" style="display: none;">
+                    <h4>Vista previa CSV</h4>
+                    <div class="csv-preview" id="csv-preview"></div>
+                </div>
+            </div>
+
+            <!-- Edición y Borrado de Proyectos -->
+            <div class="section">
+                <h3>Proyectos</h3>
+                <p>Gestiona tus proyectos: cambia nombres o elimina proyectos completos.</p>
+
+                <div class="projects-management">
+                    <div class="projects-list-container">
+                        <table class="projects-table" id="projects-management-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre del proyecto</th>
+                                    <th>Fecha de creación</th>
+                                    <th>Registros</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Se llenará dinámicamente -->
+                                <tr>
+                                    <td colspan="4" class="no-data-message">No hay proyectos disponibles</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Formulario de edición de proyecto (oculto por defecto) -->
+                <div id="edit-project-form" class="edit-form" style="display: none;">
+                    <h4>Editar proyecto</h4>
+                    <div class="form-group">
+                        <input type="hidden" id="edit-project-id">
+                        <label for="edit-project-name">Nombre del proyecto:</label>
+                        <input type="text" id="edit-project-name" required>
+                    </div>
+                    <div class="form-actions">
+                        <button id="save-project-edit-btn">Guardar</button>
+                        <button id="cancel-project-edit-btn">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edición y Borrado de Registros -->
+            <div class="section records-review-section">
+                <h3>Revisión de registros</h3>
+                <p>Identifica registros incompletos, con advertencias o posibles duplicados y corrige sus datos.</p>
+
+                <div class="form-group quality-review-rules">
+                    <label>Criterios configurables de revisión:</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="quality-require-date" checked> Revisar fecha de interacción</label>
+                        <label><input type="checkbox" id="quality-require-provider" checked> Revisar empresa proveedora</label>
+                        <label><input type="checkbox" id="quality-require-stage" checked> Revisar etapa del trabajo</label>
+                        <label><input type="checkbox" id="quality-require-verification" checked> Revisar verificación humana y responsabilidad</label>
+                        <label><input type="checkbox" id="quality-require-project" checked> Revisar asignación a proyecto</label>
+                    </div>
+                    <div class="form-actions">
+                        <button id="save-quality-rules-btn">Guardar criterios</button>
+                    </div>
+                </div>
+
+                <div class="stats-summary quality-review-summary">
+                    <button type="button" class="stat-card quality-filter-card" data-quality-filter="all" aria-pressed="true">
+                        <div class="stat-value" id="quality-total-records">0</div>
+                        <div class="stat-label">Registros</div>
+                    </button>
+                    <button type="button" class="stat-card quality-filter-card" data-quality-filter="incomplete" aria-pressed="false">
+                        <div class="stat-value" id="quality-incomplete-records">0</div>
+                        <div class="stat-label">Incompletos</div>
+                    </button>
+                    <button type="button" class="stat-card quality-filter-card" data-quality-filter="warning" aria-pressed="false">
+                        <div class="stat-value" id="quality-warning-records">0</div>
+                        <div class="stat-label">Con advertencias</div>
+                    </button>
+                    <button type="button" class="stat-card quality-filter-card" data-quality-filter="ready" aria-pressed="false">
+                        <div class="stat-value" id="quality-ready-records">0</div>
+                        <div class="stat-label">Listos para declaración</div>
+                    </button>
+                    <button type="button" class="stat-card quality-filter-card" data-quality-filter="duplicate" aria-pressed="false">
+                        <div class="stat-value" id="quality-duplicate-records">0</div>
+                        <div class="stat-label">Posibles duplicados</div>
+                    </button>
+                </div>
+
+                <div class="records-management-filters">
+                    <div class="filter-group">
+                        <label for="records-search-filter">Buscar en los registros:</label>
+                        <input type="text" id="records-search-filter" placeholder="Nombre, prompt, modelo, proyecto o notas">
+                    </div>
+                    <div class="filter-group">
+                        <label for="records-project-filter">Filtrar por proyecto:</label>
+                        <select id="records-project-filter">
+                            <option value="all">Todos los proyectos</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="records-tags-filter">Filtrar por palabras clave (etiquetas):</label>
+                        <select id="records-tags-filter">
+                            <option value="">Todas las etiquetas</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="records-quality-filter">Filtrar por estado:</label>
+                        <select id="records-quality-filter">
+                            <option value="all">Todos los estados</option>
+                            <option value="incomplete">Incompletos</option>
+                            <option value="warning">Con advertencias</option>
+                            <option value="ready">Listos para declaración</option>
+                            <option value="duplicate">Posibles duplicados</option>
+                            <option value="important">Marcados como importantes</option>
+                            <option value="no-project">Sin proyecto</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="records-sort-by">Ordenar por:</label>
+                        <select id="records-sort-by">
+                            <option value="date-desc">Fecha (más reciente primero)</option>
+                            <option value="date-asc">Fecha (más antigua primero)</option>
+                            <option value="rating-desc">Calificación (mayor primero)</option>
+                            <option value="rating-asc">Calificación (menor primero)</option>
+                            <option value="quality">Gravedad (críticos primero)</option>
+                            <option value="important">Importantes primero</option>
+                            <option value="name">Nombre</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="records-bulk-actions" class="records-bulk-actions" aria-label="Acciones para registros seleccionados">
+                    <span id="records-selection-count" class="records-selection-count" aria-live="polite">0 registros seleccionados</span>
+                    <div class="form-actions">
+                        <button type="button" id="select-visible-records-btn">Seleccionar visibles</button>
+                        <button type="button" id="clear-record-selection-btn" disabled>Limpiar selección</button>
+                        <button type="button" id="mark-selected-important-btn" disabled>Marcar como importantes</button>
+                        <button type="button" id="delete-selected-records-btn" class="delete-btn" disabled>Eliminar seleccionados</button>
+                    </div>
+                </div>
+
+                <div class="records-list-container">
+                    <div id="records-by-project" class="records-by-project">
+                        <!-- Se llenará dinámicamente -->
+                        <div class="no-data-message">No hay registros disponibles</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Estadísticas -->
+        <section id="stats" class="tab-content" role="tabpanel" aria-labelledby="tab-stats">
+            <h2>Estadísticas de uso de LLMs</h2>
+
+            <!-- Resumen General -->
+            <div class="section stats-section">
+                <h3>Resumen general</h3>
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-interactions">0</div>
+                        <div class="stat-label">Interacciones</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-models">0</div>
+                        <div class="stat-label">Modelos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-projects">0</div>
+                        <div class="stat-label">Proyectos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-purposes">0</div>
+                        <div class="stat-label">Finalidades</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opciones de Filtrado -->
+            <div class="section">
+                <h3>Filtros</h3>
+                <div class="stats-filter-controls">
+                    <div class="form-group">
+                        <label for="stats-date-range">Período:</label>
+                        <select id="stats-date-range">
+                            <option value="all">Todo el tiempo</option>
+                            <option value="month">Último mes</option>
+                            <option value="quarter">Último trimestre</option>
+                            <option value="year">Último año</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stats-project-filter">Proyecto:</label>
+                        <select id="stats-project-filter">
+                            <option value="all">Todos los proyectos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stats-model-filter">Modelo LLM:</label>
+                        <select id="stats-model-filter">
+                            <option value="all">Todos los modelos</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button id="apply-stats-filters-btn">Aplicar filtros</button>
+                        <button id="reset-stats-filters-btn">Restablecer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tablas de datos con visualización -->
+            <div class="stats-tables-grid">
+                <div class="section stats-table-container">
+                    <h3>Modelos más utilizados</h3>
+                    <div class="stats-table-wrapper">
+                        <table class="stats-table" id="models-table">
+                            <thead>
+                                <tr>
+                                    <th>Modelo</th>
+                                    <th>Interacciones</th>
+                                    <th>Porcentaje</th>
+                                    <th>Distribución</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Se llenará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section stats-table-container">
+                    <h3>Finalidades más comunes</h3>
+                    <div class="stats-table-wrapper">
+                        <table class="stats-table" id="purposes-table">
+                            <thead>
+                                <tr>
+                                    <th>Finalidad</th>
+                                    <th>Interacciones</th>
+                                    <th>Porcentaje</th>
+                                    <th>Distribución</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Se llenará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cronología -->
+            <div class="section">
+                <h3>Actividad en el tiempo</h3>
+                <div id="timeline-container" class="timeline-container">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+
+            <div class="stats-tables-grid">
+                <div class="section stats-table-container">
+                    <h3>Modelos por proyecto</h3>
+                    <div class="stats-table-wrapper">
+                        <table class="stats-table" id="models-by-project-table">
+                            <thead>
+                                <tr>
+                                    <th>Proyecto</th>
+                                    <th>Modelo</th>
+                                    <th>Interacciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section stats-table-container">
+                    <h3>Etiquetas que aparecen juntas</h3>
+                    <div class="stats-table-wrapper">
+                        <table class="stats-table" id="tag-pairs-table">
+                            <thead>
+                                <tr>
+                                    <th>Etiquetas</th>
+                                    <th>Registros</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distribución por Proyecto -->
+            <div class="section">
+                <h3>Distribución por proyecto</h3>
+                <div class="stats-table-wrapper">
+                    <table class="stats-table" id="projects-table">
+                        <thead>
+                            <tr>
+                                <th>Proyecto</th>
+                                <th>Interacciones</th>
+                                <th>Porcentaje</th>
+                                <th>Distribución</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Etiquetas Más Utilizadas -->
+            <div class="section">
+                <h3>Etiquetas más utilizadas</h3>
+                <div id="tags-cloud" class="tags-cloud">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+</html>

@@ -8,7 +8,9 @@
 
 *Bitácora digital para documentar, con transparencia y trazabilidad, el uso de modelos de lenguaje en el trabajo académico.*
 
-Extensión publicada en Chrome Web Store · Versión 2.0.0
+Código fuente y manuales · **Versión 2.0.1 en revisión**
+
+Versión disponible en Chrome Web Store · 2.0.0
 
 [**▸ Instalar desde Chrome Web Store**](https://chromewebstore.google.com/detail/chatlog/faipejgfejnoaigphcdbdeppgjmdaobn)
 
@@ -39,13 +41,23 @@ El principio rector es que **el valor de la herramienta está en la verificació
 | **Estadísticas** | Indicadores de uso por interacciones, modelos, proyectos y finalidades. |
 | **Respaldo y transferencia** | Exportación en JSON (estructura completa) y CSV (hoja de cálculo), con importación y recordatorios de respaldo. |
 
+## Cambios de la versión 2.0.1
+
+- **Guardado automático.** Conserva registros y borradores mientras escribes, muestra el estado del guardado y recupera el formulario al reabrir el panel. «Nuevo registro» inicia otra interacción conservando la anterior.
+- **Evidencia web o local.** Puedes registrar un enlace de conversación o el nombre y ubicación de un archivo de evidencia, también para interacciones en aplicaciones de escritorio. Los archivos se conservan y respaldan por separado; ChatLog guarda su referencia.
+- **Declaraciones con versión.** El aviso de las declaraciones estándar y detalladas identifica la versión de ChatLog utilizada.
+- **Captura más sencilla.** El nombre de nuevo proyecto se oculta al seleccionar uno existente. «Crear proyecto» vuelve a mostrarlo. Empresa proveedora y Nombre del LLM ofrecen sugerencias y admiten otros nombres.
+- **Ayudas y estadísticas.** Los botones explican su función al pasar el mouse o enfocarlos con el teclado. JSON sirve para restaurar ChatLog; CSV permite revisar registros en una hoja de cálculo. Los encabezados de Estadísticas cubren las filas al desplazarse.
+
+La 2.0.1 está disponible aquí para revisión. Actualizar este repositorio no publica la extensión en Chrome Web Store.
+
 ## Privacidad y diseño
 
 ChatLog opera bajo un principio de **privacidad por diseño**:
 
 - **Almacenamiento local.** Los registros, proyectos y configuración residen en el navegador del usuario.
 - **Sin recopilación externa.** La extensión está orientada a la documentación personal o de equipo; los datos se comparten únicamente cuando el usuario exporta un respaldo de forma deliberada.
-- **Trazabilidad como propósito.** Cada registro conserva la procedencia (modelo, proveedor, prompt, liga de la conversación) y la constancia de la revisión humana.
+- **Trazabilidad como propósito.** Cada registro conserva la procedencia (modelo, proveedor, prompt, enlace de la conversación o referencia de evidencia conservada) y la constancia de la revisión humana.
 
 ## Instalación
 
@@ -56,7 +68,27 @@ ChatLog está publicada y disponible para instalación directa:
 3. Fijar el icono en la barra de extensiones para tenerlo a la mano.
 4. Abrir el panel lateral y crear el primer proyecto.
 
-> Para un recorrido completo de la herramienta, consulta el *Manual de usuario de ChatLog* (versión 2.0.0).
+> Consulta el [Manual de usuario de ChatLog 2.0.1 en PDF](manuals/Manual_Usuario_ChatLog_v2.0.1.pdf) o su [versión editable en Word](manuals/Manual_Usuario_ChatLog_v2.0.1.docx).
+
+### Revisión de la versión 2.0.1
+
+Descarga o clona el repositorio. En `chrome://extensions`, activa el modo desarrollador, pulsa «Cargar descomprimida» y selecciona la carpeta que contiene `manifest.json`. Una instalación de desarrollo tiene almacenamiento independiente de la extensión de la tienda; conserva un respaldo JSON de tus registros antes de probar.
+
+Para revisar la interfaz local, ejecuta `python3 tools/preview.py` y abre `http://127.0.0.1:8765/panel/index.html`. Esta vista tiene su propio almacenamiento y no sustituye la prueba final de la extensión instalada.
+
+- [Guía de revisión de la versión 2.0.1](REVISION_2.0.1.md)
+- [Política de privacidad](https://tmarquez-mx.github.io/ChatLog/privacidad/)
+- [Analíticas de distribución y reportes](ANALITICAS.md)
+
+### Evidencia de interacciones en aplicaciones de escritorio
+
+Completa el mismo formato de ChatLog y elige «Archivo de evidencia conservada» en «Referencia de la interacción». La evidencia puede ser una exportación en PDF o texto, una transcripción o capturas legibles del intercambio. Incluye las instrucciones, respuestas relevantes, fecha, aplicación y datos del modelo cuando estén disponibles; identifica los extractos y documenta la revisión humana. La evidencia permite revisar el intercambio, pero no demuestra por sí misma que las respuestas sean correctas.
+
+Guarda la copia en la carpeta del proyecto, por ejemplo `Evidencias/2026-10-01_revision-pregunta.pdf`, y escribe esa referencia en «Nombre y ubicación del archivo». Respalda los archivos por separado: las exportaciones JSON y CSV no los incluyen. El manual explica cómo recoger y conservar la evidencia.
+
+### Comprobación del código
+
+Ejecuta `npm test` para comprobar guardado, recuperación, compatibilidad con registros anteriores y referencias de evidencia. Las pruebas utilizan almacenamiento simulado. Para generar el paquete de la extensión, ejecuta `python3 tools/package_extension.py`; el ZIP se crea en `dist/`.
 
 ## Asistentes de apoyo
 
@@ -71,6 +103,8 @@ ChatLog es un proyecto académico de acceso abierto desarrollado en el **Departa
 
 **Responsable académica:** Dra. Teresa Márquez — teresa.marquez@ibero.mx
 **Sitio del proyecto:** https://socialesypoliticas.ibero.mx/chatlog
+
+El [registro histórico en Zenodo](https://doi.org/10.5281/zenodo.21168851) corresponde a la versión 2.0 de junio de 2026.
 
 ---
 

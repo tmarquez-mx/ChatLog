@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "Si utilizas ChatLog, por favor cítalo usando los metadatos de este archivo."
 title: "ChatLog. Bitácora digital"
 type: software
-version: "2.0"
-date-released: "2026-06-12"
+version: "2.0.1"
+date-released: "2026-10-01"
 abstract: >-
   Extensión gratuita para Google Chrome diseñada como una bitácora personal y
   privada para registrar, organizar y reflexionar sobre el uso de modelos de
@@ -23,10 +23,7 @@ authors:
 license: Apache-2.0
 repository-code: "https://github.com/tmarquez-mx/ChatLog"
 url: "https://socialesypoliticas.ibero.mx/chatlog"
-identifiers:
-  - type: doi
-    value: "10.5281/zenodo.21168851"
-    description: "Registro en Zenodo (versión 2.0, junio 2026)."
+# El DOI de la versión 2.0 de junio de 2026 se conserva como referencia histórica en README.md.
 keywords:
   - integridad académica
   - trazabilidad

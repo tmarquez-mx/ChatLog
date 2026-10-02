@@ -1,2 +1,11 @@
 # Local Netlify folder
 .netlify
+
+# Archivos locales y paquetes generados
+.DS_Store
+__MACOSX/
+__pycache__/
+*.pyc
+*.crx
+*.zip
+dist/
