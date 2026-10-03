@@ -32,4 +32,4 @@ La propiedad de la tienda aplica límites: retención de datos configurada a dos
 - [Integración de Google Analytics con Chrome Web Store](https://developer.chrome.com/docs/webstore/google-analytics)
 - [Definiciones y exportación de métricas de Chrome Web Store](https://developer.chrome.com/docs/webstore/metrics)
 
-Documentación verificada el 3 de octubre de 2026. La activación en esta cuenta no se ha confirmado: el panel de Chrome Web Store solicita iniciar sesión. Activa la integración con la cuenta propietaria siguiendo los pasos anteriores; no necesitas modificar el ZIP.
+Documentación verificada el 3 de octubre de 2026. La integración se activa con la cuenta propietaria siguiendo los pasos anteriores; no requiere modificar el ZIP. Al crear la propiedad puede aparecer «Todavía no se han recibido datos de tu sitio web» y una invitación genérica a etiquetar un sitio. En esta integración, Chrome Web Store administra la medición: no añadas ese identificador a la extensión. La existencia de la propiedad no confirma todavía que haya recibido eventos; comprueba los informes tras las visitas a la ficha.
