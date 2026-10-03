@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatLog</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="modulepreload" href="../script.js">
+    <link rel="modulepreload" href="../modules/runtime.js">
+    <link rel="modulepreload" href="../modules/storage.js">
+    <link rel="modulepreload" href="../modules/records.js">
 </head>
 <body>
     <div class="container">
@@ -18,6 +22,11 @@
         </header>
 
         <div id="app-status" class="app-status" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+        <div id="startup-status" class="app-status is-error startup-status" role="status" aria-live="polite" aria-atomic="true" hidden>
+            <span id="startup-status-message"></span>
+            <button type="button" id="retry-load-btn">Reintentar</button>
+        </div>
 
         <div id="app-dialog-overlay" class="app-dialog-overlay" hidden>
             <div
@@ -119,7 +128,6 @@
             <p><strong>Repositorio:</strong> <a href="https://github.com/tmarquez-mx/ChatLog" target="_blank" rel="noopener noreferrer">Github</a></p>
             <p><strong>Privacidad:</strong> <a href="../docs/privacidad/index.html" target="_blank" rel="noopener noreferrer">Política de privacidad</a></p>
             <p><strong>Manual:</strong> <a href="../manuals/Manual_Usuario_ChatLog_v2.0.1.pdf" target="_blank" rel="noopener noreferrer">Manual en PDF</a></p>
-            <p><strong>Ayuda:</strong> <a href="https://chatgpt.com/g/g-6a25024ca4108191b831496f92340667-chatlog-asistente" target="_blank" rel="noopener noreferrer">GPT "ChatLog Asistente"</a>; <a href="https://opal.google/app/1sA_JKrK5jAbZPyJYM-HKOH2WQw90CQnd" target="_blank" rel="noopener noreferrer">Google App "ChatLog tutor"</a></p>
         </section>
 
         <section id="backup-reminder-banner" class="backup-reminder-banner" style="display: none;">
@@ -139,7 +147,7 @@
         </nav>
 
         <!-- Página Proyectos (antiguamente Principal) -->
-        <section id="main" class="tab-content active" role="tabpanel" aria-labelledby="tab-main">
+        <section id="main" class="tab-content active" inert aria-busy="true" role="tabpanel" aria-labelledby="tab-main">
             <div id="guided-flow" class="section guided-flow">
                 <div class="guided-flow-header">
                     <div>
@@ -260,25 +268,25 @@
 
                     <div class="form-group">
                         <label for="provider-company">Empresa proveedora:</label>
-                        <input type="text" id="provider-company" list="provider-suggestions" placeholder="Escribe o elige una empresa" autocomplete="off">
-                        <datalist id="provider-suggestions">
-                            <option value="OpenAI"></option>
-                            <option value="Anthropic"></option>
-                            <option value="Google"></option>
-                            <option value="Microsoft"></option>
-                        </datalist>
+                        <div class="catalog-combobox">
+                            <div class="catalog-input-row">
+                                <input type="text" id="provider-company" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="provider-company-options" placeholder="Escribe o elige una empresa" autocomplete="off">
+                                <button type="button" id="provider-company-toggle" class="catalog-toggle" aria-label="Elegir empresa proveedora" aria-controls="provider-company-options" aria-expanded="false">▾</button>
+                            </div>
+                            <div id="provider-company-options" class="catalog-options" role="listbox" aria-label="Empresas proveedoras" hidden></div>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="llm-name">Nombre del LLM: *</label>
-                        <input type="text" id="llm-name" required list="llm-suggestions" placeholder="Escribe o elige un nombre" autocomplete="off" aria-describedby="llm-suggestions-help">
-                        <datalist id="llm-suggestions">
-                            <option value="ChatGPT"></option>
-                            <option value="Claude"></option>
-                            <option value="Gemini"></option>
-                            <option value="Microsoft Copilot"></option>
-                        </datalist>
-                        <p id="llm-suggestions-help" class="field-guidance">Puedes elegir una sugerencia o escribir otro nombre. Indica en Versión del LLM el modelo específico utilizado, cuando sea visible.</p>
+                        <div class="catalog-combobox">
+                            <div class="catalog-input-row">
+                                <input type="text" id="llm-name" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="llm-name-options" placeholder="Escribe o elige un nombre" autocomplete="off" aria-describedby="llm-suggestions-help">
+                                <button type="button" id="llm-name-toggle" class="catalog-toggle" aria-label="Elegir nombre del LLM" aria-controls="llm-name-options" aria-expanded="false">▾</button>
+                            </div>
+                            <div id="llm-name-options" class="catalog-options" role="listbox" aria-label="Modelos de lenguaje" hidden></div>
+                        </div>
+                        <p id="llm-suggestions-help" class="field-guidance">La flecha permite cambiar la selección sin borrar el texto. Elegir una empresa o modelo de la lista completa su par. También puedes escribir otros nombres. Revisa por separado la versión del modelo utilizado.</p>
                     </div>
 
                     <div class="form-group">
@@ -302,7 +310,7 @@
                     <div class="form-group" id="evidence-reference-container" hidden>
                         <label for="evidence-reference">Nombre y ubicación del archivo: *</label>
                         <input type="text" id="evidence-reference" aria-describedby="evidence-reference-guidance" placeholder="Evidencias/2026-10-01_revision.pdf" disabled>
-                        <p id="evidence-reference-guidance" class="field-guidance">Usa una ubicación relativa a la carpeta de tu proyecto. ChatLog guarda la referencia; no adjunta ni abre el archivo.</p>
+                        <p id="evidence-reference-guidance" class="field-guidance">Escribe el nombre y la ubicación del archivo en tu equipo, o pega su URL de Google Drive o OneDrive. ChatLog guarda la referencia; no adjunta ni abre el archivo ni comprueba sus permisos de acceso.</p>
                     </div>
                     <details class="field-guidance">
                         <summary>Qué es la evidencia y cómo recogerla</summary>
@@ -310,7 +318,7 @@
                         <ol>
                             <li>Exporta o imprime la conversación si la aplicación lo permite. Si no, copia los mensajes en un documento indicando quién escribió cada uno, o toma capturas con el contexto necesario.</li>
                             <li>Conserva la fecha, la aplicación y el modelo cuando estén disponibles. Identifica los fragmentos como extractos.</li>
-                            <li>Guarda la copia en una carpeta de evidencias de tu proyecto y escribe aquí su nombre y ubicación.</li>
+                            <li>Guarda la copia en una carpeta de evidencias de tu proyecto, en Google Drive o en OneDrive. Selecciona Archivo de evidencia conservada y escribe su nombre y ubicación, o pega la URL del archivo. Si otra persona necesita revisarlo, comprueba sus permisos de acceso.</li>
                             <li>Respalda los archivos por separado: el CSV o JSON de ChatLog solo incluye la referencia. Protege los datos confidenciales al compartir una copia.</li>
                         </ol>
                         <p>No necesitas publicar el archivo en internet. En Verificación humana explica qué comprobaste y qué aceptaste, modificaste o descartaste.</p>
@@ -563,8 +571,8 @@
                     <div class="import-tab">
                         <div class="form-group">
                             <label for="import-file">Importar desde JSON:</label>
-                            <input type="file" id="import-file" accept=".json">
-                            <div class="form-actions">
+                            <div class="import-file-row">
+                                <input type="file" id="import-file" accept=".json">
                                 <button id="import-data-btn">Importar JSON</button>
                             </div>
                         </div>
@@ -573,8 +581,8 @@
                     <div class="import-tab">
                         <div class="form-group">
                             <label for="csv-file">Importar desde CSV:</label>
-                            <input type="file" id="csv-file" accept=".csv">
-                            <div class="form-actions">
+                            <div class="import-file-row">
+                                <input type="file" id="csv-file" accept=".csv">
                                 <button id="import-csv-btn">Importar CSV</button>
                             </div>
                         </div>
@@ -908,6 +916,6 @@
         </section>
     </div>
 
-    <script src="../script.js"></script>
+    <script type="module" src="../script.js"></script>
 </body>
 </html>

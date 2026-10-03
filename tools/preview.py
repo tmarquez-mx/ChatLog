@@ -13,13 +13,27 @@ window.chrome = {runtime: {}, storage: {onChanged: {addListener(fn) {previewList
   get(keys, cb) { const out = {}; for (const key of keys) out[key] = localStorage.getItem('chatlog-review:' + key); queueMicrotask(() => cb(out)); },
   set(values, cb) {
     const changes = {};
+    const previous = {};
     try {
+      for (const key of Object.keys(values)) previous[key] = localStorage.getItem('chatlog-review:' + key);
       for (const [key, value] of Object.entries(values)) {
-        const oldValue = localStorage.getItem('chatlog-review:' + key);
         localStorage.setItem('chatlog-review:' + key, value);
-        changes[key] = {oldValue, newValue: value};
+        changes[key] = {oldValue: previous[key], newValue: value};
       }
-    } catch (error) { chrome.runtime.lastError = {message: error.message}; }
+    } catch (error) {
+      let message = error.message;
+      try {
+        for (const [key, value] of Object.entries(previous)) {
+          if (value === null) localStorage.removeItem('chatlog-review:' + key);
+          else localStorage.setItem('chatlog-review:' + key, value);
+        }
+      } catch (restoreError) {
+        message += '; no se pudo restaurar la vista local: ' + restoreError.message;
+      }
+      chrome.runtime.lastError = {message};
+      try { cb(); } finally { delete chrome.runtime.lastError; }
+      return;
+    }
     cb(); delete chrome.runtime.lastError;
     previewListeners.forEach(fn => fn(changes, 'local'));
   },
@@ -55,7 +69,7 @@ class Handler(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(content)
             return
-        if not route.startswith(('/panel/', '/docs/', '/manuals/', '/icons/')) and route != '/script.js':
+        if not route.startswith(('/panel/', '/docs/', '/manuals/', '/icons/', '/modules/')) and route != '/script.js':
             self.send_error(404)
             return
         if '..' in route:

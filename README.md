@@ -44,10 +44,14 @@ El principio rector es que **el valor de la herramienta está en la verificació
 ## Cambios de la versión 2.0.1
 
 - **Guardado automático.** Conserva registros y borradores mientras escribes, muestra el estado del guardado y recupera el formulario al reabrir el panel. «Nuevo registro» inicia otra interacción conservando la anterior.
-- **Evidencia web o local.** Puedes registrar un enlace de conversación o el nombre y ubicación de un archivo de evidencia, también para interacciones en aplicaciones de escritorio. Los archivos se conservan y respaldan por separado; ChatLog guarda su referencia.
+- **Evidencia web, local o en la nube.** Puedes registrar un enlace de conversación o el nombre y ubicación de un archivo de evidencia, también para interacciones en aplicaciones de escritorio. El campo admite URL de Google Drive o OneDrive. Los archivos se conservan y respaldan por separado; ChatLog guarda su referencia y no comprueba sus permisos de acceso.
 - **Declaraciones con versión.** El aviso de las declaraciones estándar y detalladas identifica la versión de ChatLog utilizada.
-- **Captura más sencilla.** El nombre de nuevo proyecto se oculta al seleccionar uno existente. «Crear proyecto» vuelve a mostrarlo. Empresa proveedora y Nombre del LLM ofrecen sugerencias y admiten otros nombres.
+- **Captura más sencilla.** El nombre de nuevo proyecto se oculta al seleccionar uno existente. «Crear proyecto» vuelve a mostrarlo. Las listas de Empresa proveedora y Nombre del LLM permiten cambiar la selección sin borrar el texto y completan su par en ambos sentidos. También admiten otros nombres.
 - **Ayudas y estadísticas.** Los botones explican su función al pasar el mouse o enfocarlos con el teclado. JSON sirve para restaurar ChatLog; CSV permite revisar registros en una hoja de cálculo. Los encabezados de Estadísticas cubren las filas al desplazarse.
+
+- **Apertura y organización del código.** La carga inicial agrupa la lectura de datos; Declaración, Estadísticas y Herramientas se cargan al seleccionarlas. Las fichas y los detalles de los registros se construyen cuando se abren.
+- **Recuperación de apertura.** Si falla la carga inicial, el aviso permanece visible y permite «Reintentar» sin cerrar el panel ni duplicar los eventos de los controles.
+- **Versión en respaldos.** Los JSON indican la versión instalada de ChatLog; la vista previa la distingue de la versión del formato. Los respaldos anteriores siguen siendo compatibles.
 
 La 2.0.1 está disponible aquí para revisión. Actualizar este repositorio no publica la extensión en Chrome Web Store.
 
@@ -77,6 +81,7 @@ Descarga o clona el repositorio. En `chrome://extensions`, activa el modo desarr
 Para revisar la interfaz local, ejecuta `python3 tools/preview.py` y abre `http://127.0.0.1:8765/panel/index.html`. Esta vista tiene su propio almacenamiento y no sustituye la prueba final de la extensión instalada.
 
 - [Guía de revisión de la versión 2.0.1](REVISION_2.0.1.md)
+- [Instalación y prueba desde la barra de Chrome](PRUEBA_2.0.1.md)
 - [Política de privacidad](https://tmarquez-mx.github.io/ChatLog/privacidad/)
 - [Analíticas de distribución y reportes](ANALITICAS.md)
 
@@ -84,11 +89,15 @@ Para revisar la interfaz local, ejecuta `python3 tools/preview.py` y abre `http:
 
 Completa el mismo formato de ChatLog y elige «Archivo de evidencia conservada» en «Referencia de la interacción». La evidencia puede ser una exportación en PDF o texto, una transcripción o capturas legibles del intercambio. Incluye las instrucciones, respuestas relevantes, fecha, aplicación y datos del modelo cuando estén disponibles; identifica los extractos y documenta la revisión humana. La evidencia permite revisar el intercambio, pero no demuestra por sí misma que las respuestas sean correctas.
 
-Guarda la copia en la carpeta del proyecto, por ejemplo `Evidencias/2026-10-01_revision-pregunta.pdf`, y escribe esa referencia en «Nombre y ubicación del archivo». Respalda los archivos por separado: las exportaciones JSON y CSV no los incluyen. El manual explica cómo recoger y conservar la evidencia.
+Guarda la copia en la carpeta del proyecto, por ejemplo `Evidencias/2026-10-01_revision-pregunta.pdf`, y escribe esa referencia en «Nombre y ubicación del archivo». También puedes indicar una URL de Google Drive o OneDrive y verificar por separado que las personas destinatarias tengan acceso. Respalda los archivos por separado: las exportaciones JSON y CSV no los incluyen. El manual explica cómo recoger y conservar la evidencia.
 
 ### Comprobación del código
 
-Ejecuta `npm test` para comprobar guardado, recuperación, compatibilidad con registros anteriores y referencias de evidencia. Las pruebas utilizan almacenamiento simulado. Para generar el paquete de la extensión, ejecuta `python3 tools/package_extension.py`; el ZIP se crea en `dist/`.
+Ejecuta `npm test`: la revisión actual pasa 48 pruebas de guardado, recuperación, errores y reintentos, compatibilidad de datos, referencias de evidencia y carga real de módulos. Las pruebas utilizan datos ficticios y almacenamiento simulado.
+
+`python3 tools/package_extension.py --check` valida los 20 archivos necesarios y sus dependencias sin generar el ZIP. Sin `--check`, crea el paquete y la carpeta descomprimida en `dist/`, con manual y política incluidos. El manifiesto mantiene 2.0.1, requiere Chrome 116 como mínimo y conserva los permisos `storage`, `sidePanel` y `downloads`.
+
+La entrada está en [`script.js`](script.js). [`modules/`](modules/) separa almacenamiento, reglas de registros, declaraciones, estadísticas, administración y transferencia. Los módulos secundarios se cargan al seleccionarlos. Consulta el [informe de eficiencia](auditoria/Auditoria_eficiencia_2.0.1.txt) y el [informe de correcciones](auditoria/Auditoria_ChatLog_2.0.1.txt). La apertura completa desde el icono todavía debe comprobarse con la copia instalada en Chrome.
 
 ## Asistentes de apoyo
 

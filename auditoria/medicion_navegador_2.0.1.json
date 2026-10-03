@@ -1,0 +1,22 @@
+{
+  "registrosFicticios": 3000,
+  "muestras": {
+    "baseline": [
+      25.6,
+      15.7,
+      21.1,
+      18.4,
+      16.3
+    ],
+    "optimized": [
+      9,
+      4.4,
+      6.9,
+      4,
+      3.7
+    ]
+  },
+  "medianaAntesMs": 18.4,
+  "medianaDespuesMs": 4.4,
+  "alcance": "Inicialización de datos; excluye navegación, descarga de archivos y tiempo desde el clic en el icono."
+}

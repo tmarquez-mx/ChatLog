@@ -1,14 +1,3 @@
-// ChatLog - Service Worker (background.js)
-// Requerido para: abrir el panel lateral al hacer clic en el ícono de la extensión
-
-chrome.action.onClicked.addListener((tab) => {
-  chrome.sidePanel.open({ tabId: tab.id });
-});
-
-// Configuración del panel lateral al instalar la extensión
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.sidePanel.setOptions({
-    enabled: true,
-    path: "panel/index.html"
-  });
-});
+// Chrome abre el panel desde el icono sin esperar a nuestro manejador de clic.
+chrome.sidePanel.setPanelBehavior({openPanelOnActionClick: true})
+    .catch(error => console.error('No se pudo configurar el panel de ChatLog:', error));
