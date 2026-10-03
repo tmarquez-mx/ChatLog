@@ -119,7 +119,7 @@ const shots = {
 document.querySelectorAll("[data-shot]").forEach((button) =>
   button.addEventListener("click", () => {
     const key = button.dataset.shot;
-    $("screenshot").src = `assets/${key}.png`;
+    $("screenshot").src = `assets/${key}.jpg`;
     $("screenshot").alt =
       `ChatLog V2: sección ${shots[key][0]} con datos de ejemplo`;
     $("shot-caption").textContent = shots[key][1];

@@ -4,7 +4,6 @@
   "version": "2.0.1",
   "scripts": {
     "test": "node --experimental-vm-modules --test tests/*.test.js",
-    "check:package": "python3 tools/package_extension.py --check",
-    "benchmark": "node --experimental-vm-modules auditoria/medir_2.0.1.cjs"
+    "check:package": "python3 tools/package_extension.py --check"
   }
 }
